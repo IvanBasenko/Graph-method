@@ -9,15 +9,14 @@ public class Model {
     public double[] counts;
     private double mul1, mul2, x1, x2, equal, restrictions_x,
             restrictions_y, function_X, function_Y;
-    private String operation, restrictionsOperationX,
+    private String restrictionsOperationX,
             restrictionOperationY, inequality, functionOperation;
 
     public void save(int count, int operationCount) {
         mas[count] = mul1;
         mas[count + 1] = mul2;
         mas[count + 2] = equal;
-        operations[operationCount] = operation;
-        operations[operationCount + 1] = inequality;
+        operations[operationCount] = inequality;
         System.out.println(Arrays.toString(mas));
         System.out.println(Arrays.toString(operations));
     }
@@ -33,7 +32,7 @@ public class Model {
     }
 
     public double[] getCounts() {
-        return Arrays.copyOf(counts,counts.length);
+        return Arrays.copyOf(counts, counts.length);
     }
 
     public void setCounts(double[] counts) {
@@ -77,7 +76,7 @@ public class Model {
     }
 
     public double getRestrictions_y() {
-            return restrictions_y;
+        return restrictions_y;
     }
 
     public void setRestrictions_y(double restrictions_y) {
@@ -116,14 +115,6 @@ public class Model {
         this.restrictionOperationY = restrictionOperationY;
     }
 
-    public String getOperation() {
-        return operation;
-    }
-
-    public void setOperation(String operation) {
-        this.operation = operation;
-    }
-
     public int getSize() {
         return size;
     }
@@ -131,7 +122,7 @@ public class Model {
     public void setSize(int size) {
         this.size = size * 3;
         mas = new double[this.size];
-        operations = new String[this.size - size];
+        operations = new String[this.size -2* size];
         counts = new double[this.size - size];
     }
 
