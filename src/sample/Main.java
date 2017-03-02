@@ -22,9 +22,8 @@ public class Main extends Application {
 //        mas[3] = model.counts[3];
 //        mas[4] = model.counts[4];
 //        mas[5] = model.counts[5];
-       mas[1]= drawBresenhamsLine(model.counts[0], 0, 0, model.counts[1],1);
-       mas[2]= drawBresenhamsLine(model.counts[0], 0,0 , model.counts[1],0);
-
+        mas[1] = drawBresenhamsLine(model.counts[0], 0, 0, model.counts[1], 1);
+        mas[2] = drawBresenhamsLine(model.counts[0], 0, 0, model.counts[1], 0);
 
 
         final NumberAxis xAxis = new NumberAxis();
@@ -64,20 +63,20 @@ public class Main extends Application {
     }
 
     public static void main(String[] args) {
-//        Model model = new Model();
         Scanner sc = new Scanner(System.in);
         System.out.print("Введите количество огранечений");
         model.setSize(sc.nextInt());
         int count = 0, operationCount = 0;
-        for (int i = 0; i < model.getSize() / 3; i++) {
+        for (int i = 0; i < model.getSize(); i++) {
             controller(model);
             model.save(count, operationCount);
-            count += 3;
-            operationCount++;
+            count++;
+//            operationCount++;
         }
-        model.count();
 
-//        staticFunction(model);
+        model.count();
+        model.gs();
+        staticFunction(model);
         launch(args);
     }
 
@@ -123,7 +122,7 @@ public class Main extends Application {
         //возвращает 0, если аргумент (x) равен нулю; -1, если x < 0 и 1, если x > 0.
     }
 
-    public double drawBresenhamsLine(double xStart, double yStart, double xEnd, double yEnd,int s) {
+    private double drawBresenhamsLine(double xStart, double yStart, double xEnd, double yEnd, int s) {
         double x, y, dx, dy, incX, incY, pdx, pdy, es, el, err;
         dx = xEnd - xStart;//проекция на ось икс
         dy = yEnd - yStart;//проекция на ось игрек
@@ -155,7 +154,6 @@ public class Main extends Application {
         x = xStart;
         y = yStart;
         err = el / 2;
-//        g.drawLine (x, y, x, y);//ставим первую точку
         //все последующие точки возможно надо сдвигать, поэтому первую ставим вне цикла
 
         for (int t = 0; t < el * 2; t++)//идём по всем точкам, начиная со второй и до последней
@@ -169,16 +167,8 @@ public class Main extends Application {
                 x += pdx;//продолжить тянуть прямую дальше, т.е. сдвинуть влево или вправо, если
                 y += pdy;//цикл идёт по иксу; сдвинуть вверх или вниз, если по y
             }
-
-//            g.drawLine (x, y, x, y);
-
         }
-//        double[] indXY = new double[2];
-//        indXY[0] = x;
-//        indXY[1] = y;
-        if (s==1)
-        return x;
-        else
-            return y;
+        if (s == 1) return x;
+        else return y;
     }
 }

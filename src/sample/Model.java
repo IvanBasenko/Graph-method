@@ -3,52 +3,46 @@ package sample;
 import java.util.Arrays;
 
 public class Model {
+    private static final int F = 2;
+
     private int size;
-    private double[] mas;
+    private double[] equals;
+    private double[][] mas;
     private String[] operations;
     public double[] counts;
     private double mul1, mul2, x1, x2, equal, restrictions_x,
-            restrictions_y, function_X, function_Y;
+            restrictions_y, function_X, function_Y, max, min, xMax, yMax, xMin, yMin;
     private String restrictionsOperationX,
             restrictionOperationY, inequality, functionOperation;
-
-    public void save(int count, int operationCount) {
-        mas[count] = mul1;
-        mas[count + 1] = mul2;
-        mas[count + 2] = equal;
-        operations[operationCount] = inequality;
-        System.out.println(Arrays.toString(mas));
-        System.out.println(Arrays.toString(operations));
-    }
-
     private int j = 0;
 
-    public String[] getOperations() {
-        return operations;
+    public void save(int i, int count) {
+        mas[i][count] = mul1;
+        mas[i][count + 1] = mul2;
+        equals[i] = equal;
+//        operations[operationCount] = inequality;
+//        System.out.println(Arrays.toString(mas));
+        System.out.println(Arrays.toString(equals));
+//        System.out.println(Arrays.toString(operations));
     }
-
-    public void setOperations(String[] operations) {
-        this.operations = operations;
+    public void gs(){
+       GaussianElimination g = new GaussianElimination();
+        double[] x = g.gaussian(mas,equals);
+        for (int i = 0; i < F; i++) {
+            System.out.println(x[i]);
+        }
     }
-
-    public double[] getCounts() {
-        return Arrays.copyOf(counts, counts.length);
-    }
-
-    public void setCounts(double[] counts) {
-        this.counts = counts;
-    }
-
     public void count() {
         for (int i = 0; i < this.size; i++) {
-            counts[j] = mas[i + 2] / mas[i];
-            counts[j + 1] = mas[i + 2] / mas[i + 1];
-            i += 2;
-            j += 2;
+            for (int k = 0; k < F; k++) {
+                counts[j] = equals[i] / mas[i][k];
+                j++;
+            }
         }
         System.out.println(Arrays.toString(counts));
 
     }
+
 
     public String getInequality() {
         return inequality;
@@ -120,17 +114,18 @@ public class Model {
     }
 
     public void setSize(int size) {
-        this.size = size * 3;
-        mas = new double[this.size];
-        operations = new String[this.size -2* size];
-        counts = new double[this.size - size];
+        this.size = size;
+        mas = new double[this.size][F];
+        equals = new double[this.size];
+        operations = new String[this.size];
+        counts = new double[this.size*2];
     }
 
-    public double[] getMas() {
+    public double[][] getMas() {
         return mas;
     }
 
-    public void setMas(double[] mas) {
+    public void setMas(double[][] mas) {
         this.mas = mas;
     }
 
