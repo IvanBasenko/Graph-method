@@ -11,21 +11,18 @@ import java.util.Scanner;
 
 public class Main extends Application {
     static Model model = new Model();
+    private double[] mas = new double[model.getSize() * 3];
+    private int k = 0;
 
     @Override
     public void start(Stage stage) {
-
-        double[] mas = new double[6];
-        mas[0] = model.counts[0];
-//        mas[1] = model.counts[1];
-//        mas[2] = model.counts[2];
-//        mas[3] = model.counts[3];
-//        mas[4] = model.counts[4];
-//        mas[5] = model.counts[5];
-        mas[1] = drawBresenhamsLine(model.counts[0], 0, 0, model.counts[1], 1);
-        mas[2] = drawBresenhamsLine(model.counts[0], 0, 0, model.counts[1], 0);
-
-
+        for (int i = 0; i < mas.length; i++) {
+            mas[i] = model.counts[k];
+            mas[i + 1] = drawBresenhamsLine(model.counts[k], 0, 0, model.counts[k + 1], 1);
+            mas[i + 2] = drawBresenhamsLine(model.counts[k], 0, 0, model.counts[k + 1], 0);
+            i += 2;
+            k += 2;
+        }
         final NumberAxis xAxis = new NumberAxis();
         final NumberAxis yAxis = new NumberAxis();
         xAxis.setLabel("Number of Month");
@@ -33,30 +30,84 @@ public class Main extends Application {
                 xAxis, yAxis);
 
         lineChart.setTitle("Line Chart");
-        XYChart.Series<Number, Number> series = new XYChart.Series<Number, Number>();
-        XYChart.Series<Number, Number> series2 = new XYChart.Series<Number, Number>();
-        XYChart.Series<Number, Number> series3 = new XYChart.Series<Number, Number>();
-        XYChart.Series<Number, Number> series4 = new XYChart.Series<Number, Number>();
-        series.setName("f(x)1");
-        series2.setName("f(x)2");
-        series3.setName("f(x)3");
+        XYChart.Series<Number, Number> func1 = new XYChart.Series<Number, Number>();
+        XYChart.Series<Number, Number> func2 = new XYChart.Series<Number, Number>();
+        XYChart.Series<Number, Number> func3 = new XYChart.Series<Number, Number>();
+        XYChart.Series<Number, Number> func4 = new XYChart.Series<Number, Number>();
+        XYChart.Series<Number, Number> funcX = new XYChart.Series<Number, Number>();
+        XYChart.Series<Number, Number> funcY = new XYChart.Series<Number, Number>();
+        XYChart.Series<Number, Number> vector = new XYChart.Series<Number, Number>();
+        XYChart.Series<Number, Number> max = new XYChart.Series<Number, Number>();
+        XYChart.Series<Number, Number> min = new XYChart.Series<Number, Number>();
+
+        func1.setName("f(x)1");
+        func2.setName("f(x)2");
+        func3.setName("f(x)3");
+        func4.setName("f(x)4");
+        funcX.setName("X");
+        funcY.setName("Y");
+        vector.setName("Result function");
+        max.setName("F(max)");
+        min.setName("F(min)");
 
 //        populating the series with data
-        series.getData().add(new XYChart.Data<Number, Number>(mas[0], 0));
-        series.getData().add(new XYChart.Data<Number, Number>(mas[1], mas[2]));
-//        series2.getData().add(new XYChart.Data<Number, Number>(mas[2], 0));
-//        series2.getData().add(new XYChart.Data<Number, Number>(0, mas[3]));
-//        series3.getData().add(new XYChart.Data<Number, Number>(mas[4], 0));
-//        series3.getData().add(new XYChart.Data<Number, Number>(0, mas[5]));
-//        series4.getData().add(new XYChart.Data<Number, Number>(mas[6], 0));
-//        series4.getData().add(new XYChart.Data<Number, Number>(0, mas[7]));
+        for (int i = 0; i < model.getSize(); i++) {
+            switch (i) {
+                case 0:
+                    if (model.counts[1] < 0)
+                        func1.getData().add(new XYChart.Data<Number, Number>(0, model.counts[1]));
+                    else
+                        func1.getData().add(new XYChart.Data<Number, Number>(mas[0], 0));
+                    func1.getData().add(new XYChart.Data<Number, Number>(mas[1], mas[2]));
+                    break;
+                case 1:
+                    if (model.counts[3] < 0)
+                        func2.getData().add(new XYChart.Data<Number, Number>(0, model.counts[3]));
+                    else
+                        func2.getData().add(new XYChart.Data<Number, Number>(mas[3], 0));
+                    func2.getData().add(new XYChart.Data<Number, Number>(mas[4], mas[5]));
+                    break;
+                case 2:
+                    if (model.counts[5] < 0)
+                        func3.getData().add(new XYChart.Data<Number, Number>(0, model.counts[5]));
+                    else
+                        func3.getData().add(new XYChart.Data<Number, Number>(mas[6], 0));
+                    func3.getData().add(new XYChart.Data<Number, Number>(mas[7], mas[8]));
+                    break;
+                case 3:
+                    if (model.counts[7] < 0)
+                        func4.getData().add(new XYChart.Data<Number, Number>(0, model.counts[7]));
+                    else
+                        func4.getData().add(new XYChart.Data<Number, Number>(mas[9], 0));
+                    func4.getData().add(new XYChart.Data<Number, Number>(mas[10], mas[11]));
+                    break;
+            }
+        }
+
+
+//        funcX.getData().add(new XYChart.Data<Number, Number>(0, mas[7]));
+//        funcX.getData().add(new XYChart.Data<Number, Number>(0, mas[7]));
+//
+//        funcY.getData().add(new XYChart.Data<Number, Number>(0, mas[7]));
+//        funcY.getData().add(new XYChart.Data<Number, Number>(0, mas[7]));
+//
+//        vector.getData().add(new XYChart.Data<Number, Number>(0, mas[7]));
+//        vector.getData().add(new XYChart.Data<Number, Number>(0, mas[7]));
+//
+//        max.getData().add(new XYChart.Data<Number, Number>(0, mas[7]));
+//        min.getData().add(new XYChart.Data<Number, Number>(0, mas[7]));
 
 
         Scene scene = new Scene(lineChart, 600, 600);
-        lineChart.getData().add(series);
-        lineChart.getData().add(series2);
-        lineChart.getData().add(series3);
-        lineChart.getData().add(series4);
+        lineChart.getData().add(func1);
+        lineChart.getData().add(func2);
+        lineChart.getData().add(func3);
+        lineChart.getData().add(func4);
+        lineChart.getData().add(funcX);
+        lineChart.getData().add(funcY);
+        lineChart.getData().add(vector);
+        lineChart.getData().add(max);
+        lineChart.getData().add(min);
 
         stage.setScene(scene);
         stage.show();
@@ -75,8 +126,8 @@ public class Main extends Application {
         }
 
         model.count();
-        model.gs();
-        staticFunction(model);
+//        model.gs();
+//        staticFunction(model);
         launch(args);
     }
 
@@ -118,19 +169,26 @@ public class Main extends Application {
     }
 
     private int sign(int x) {
+//        if (model.counts[1] <0)
+//            return (x > 0) ? -1 : (x < 0) ? 1 : 0;
+//        else
         return (x > 0) ? 1 : (x < 0) ? -1 : 0;
         //возвращает 0, если аргумент (x) равен нулю; -1, если x < 0 и 1, если x > 0.
     }
 
     private double drawBresenhamsLine(double xStart, double yStart, double xEnd, double yEnd, int s) {
         double x, y, dx, dy, incX, incY, pdx, pdy, es, el, err;
-        dx = xEnd - xStart;//проекция на ось икс
-        dy = yEnd - yStart;//проекция на ось игрек
-
-        incX = sign((int) dx);
-
-        incY = sign((int) dy);
-
+        if (yEnd < 0) {
+            dx = (xEnd - xStart) / -1;//проекция на ось икс
+            dy = (yEnd - yStart) / -1;
+            incX = sign((int) dx);
+            incY = sign((int) dy);
+        } else {
+            dx = xEnd - xStart;//проекция на ось икс
+            dy = yEnd - yStart;//проекция на ось игрек
+            incX = sign((int) dx);
+            incY = sign((int) dy);
+        }
 
         if (dx < 0) dx = -dx;//далее мы будем сравнивать: "if (dx < dy)"
         if (dy < 0) dy = -dy;//поэтому необходимо сделать dx = |dx|; dy = |dy|
