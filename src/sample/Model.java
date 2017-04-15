@@ -1,5 +1,6 @@
 package sample;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Model {
@@ -9,7 +10,10 @@ public class Model {
     private double[] equals;
     private double[][] mas;
     private String[] operations;
+    public double[][] points;
+    public double[] points2;
     public double[] counts;
+    public ArrayList<Double> result = new ArrayList<Double>();
     private double mul1, mul2, x1, x2, equal, restrictions_x,
             restrictions_y, function_X, function_Y, max, min, xMax, yMax, xMin, yMin;
     private String restrictionsOperationX,
@@ -20,18 +24,100 @@ public class Model {
         mas[i][count] = mul1;
         mas[i][count + 1] = mul2;
         equals[i] = equal;
-//        operations[operationCount] = inequality;
-//        System.out.println(Arrays.toString(mas));
         System.out.println(Arrays.toString(equals));
-//        System.out.println(Arrays.toString(operations));
     }
-    public void gs(){
-       GaussianElimination g = new GaussianElimination();
-        double[] x = g.gaussian(mas,equals);
-        for (int i = 0; i < F; i++) {
-            System.out.println(x[i]);
+
+    public void gs() {
+        GaussianElimination g = new GaussianElimination();
+
+        for (int i = 2; i <= equals.length; i++) {
+            switch (i) {
+                case 2:
+                    points = new double[][]{{mas[0][0], mas[0][1]}, {mas[1][0], mas[1][1]}}; // при двух функциях
+                    points2 = new double[]{equals[0], equals[1]};
+                    double[] x = g.gaussian(points, points2);
+                        result.add(x[0]);
+                        result.add(x[1]);
+                    break;
+
+                case 3:
+                    points = new double[][]{{mas[0][0], mas[0][1]}, {mas[2][0], mas[2][1]}}; // при трех функциях
+                    points2 = new double[]{equals[0], equals[2]};
+                    x = g.gaussian(points, points2);
+                    result.add(x[0]);
+                    result.add(x[1]);
+                    points = new double[][]{{mas[1][0], mas[1][1]}, {mas[2][0], mas[2][1]}};
+                    points2 = new double[]{equals[1], equals[2]};
+                    x = g.gaussian(points, points2);
+                    result.add(x[0]);
+                    result.add(x[1]);
+                    break;
+                case 4:
+                    points = new double[][]{{mas[0][0], mas[0][1]}, {mas[3][0], mas[3][1]}};
+                    points2 = new double[]{equals[0], equals[3]};
+                    x = g.gaussian(points, points2);
+                    result.add(x[0]);
+                    result.add(x[1]);
+                    points = new double[][]{{mas[1][0], mas[1][1]}, {mas[3][0], mas[3][1]}};
+                    points2 = new double[]{equals[1], equals[3]};
+                    x = g.gaussian(points, points2);
+                    result.add(x[0]);
+                    result.add(x[1]);
+                    points = new double[][]{{mas[2][0], mas[2][1]}, {mas[3][0], mas[3][1]}};
+                    points2 = new double[]{equals[2], equals[3]};
+                    x = g.gaussian(points, points2);
+                    result.add(x[0]);
+                    result.add(x[1]);
+                    break;
+            }
         }
+        for (int i = 2; i <= equals.length; i++) {
+            switch (i) {
+                case 2:
+                    points = new double[][]{{mas[0][0], mas[0][1]}, {1, 0}};
+                    points2 = new double[]{equals[0], restrictions_x};
+                    resultXY(points, points2, g);
+                    points = new double[][]{{mas[0][0], mas[0][1]}, {0, 1}};
+                    points2 = new double[]{equals[0], restrictions_y};
+                    resultXY(points, points2, g);
+                    points = new double[][]{{mas[1][0], mas[1][1]}, {1, 0}};
+                    points2 = new double[]{equals[1], restrictions_x};
+                    resultXY(points, points2, g);
+                    points = new double[][]{{mas[1][0], mas[1][1]}, {0, 1}};
+                    points2 = new double[]{equals[1], restrictions_y};
+                    resultXY(points, points2, g);
+                    break;
+                case 3:
+                    points = new double[][]{{mas[2][0], mas[2][1]}, {1, 0}};
+                    points2 = new double[]{equals[2], restrictions_x};
+                    resultXY(points, points2, g);
+                    points = new double[][]{{mas[2][0], mas[2][1]}, {0, 1}};
+                    points2 = new double[]{equals[2], restrictions_y};
+                    resultXY(points, points2, g);
+                    break;
+                case 4:
+                    points = new double[][]{{mas[3][0], mas[3][1]}, {1, 0}};
+                    points2 = new double[]{equals[3], restrictions_x};
+                    resultXY(points, points2, g);
+                    points = new double[][]{{mas[3][0], mas[3][1]}, {0, 1}};
+                    points2 = new double[]{equals[3], restrictions_y};
+                    resultXY(points, points2, g);
+                    break;
+            }
+        }
+
+        System.out.println(result.toString());
+
     }
+
+    private void resultXY(double[][] points, double[] points2, GaussianElimination g) {
+        double[] x = g.gaussian(points, points2);
+        if (x[0] % 0.1 != 0)
+            result.add(x[0]);
+        if (x[1] % 0.1 != 0)
+            result.add(x[1]);
+    }
+
     public void count() {
         for (int i = 0; i < this.size; i++) {
             for (int k = 0; k < F; k++) {
@@ -118,7 +204,7 @@ public class Model {
         mas = new double[this.size][F];
         equals = new double[this.size];
         operations = new String[this.size];
-        counts = new double[this.size*2];
+        counts = new double[this.size * 2];
     }
 
     public double[][] getMas() {
@@ -169,6 +255,4 @@ public class Model {
     public void setEqual(double equal) {
         this.equal = equal;
     }
-
-
 }

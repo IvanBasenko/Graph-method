@@ -3,8 +3,9 @@ package sample;
 public class GaussianElimination {
     private static final double EPSILON = 1e-10;
 
+    // Gaussian elimination with partial pivoting
     public static double[] gaussian(double[][] A, double[] b) {
-        int N = b.length;
+        int N  = b.length;
 
         for (int p = 0; p < N; p++) {
 
@@ -15,12 +16,8 @@ public class GaussianElimination {
                     max = i;
                 }
             }
-            double[] temp = A[p];
-            A[p] = A[max];
-            A[max] = temp;
-            double t = b[p];
-            b[p] = b[max];
-            b[max] = t;
+            double[] temp = A[p]; A[p] = A[max]; A[max] = temp;
+            double   t    = b[p]; b[p] = b[max]; b[max] = t;
 
             // singular or nearly singular
             if (Math.abs(A[p][p]) <= EPSILON) {
