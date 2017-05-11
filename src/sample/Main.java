@@ -133,6 +133,7 @@ public class Main extends Application {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        model.maxMinFunction();
         launch(args);
     }
 
@@ -144,8 +145,8 @@ public class Main extends Application {
         System.out.print("Введите множитель х2*");
         model.setMul2(sc.nextDouble());
         sc.nextLine();
-        System.out.print("Введите операцию ");
-        model.setInequality(sc.nextLine()); // 2
+//        System.out.print("Введите операцию ");
+//        model.setInequality(sc.nextLine()); // 2
         System.out.print("Введите результат функции");
         model.setEqual(sc.nextDouble());
         sc.nextLine();

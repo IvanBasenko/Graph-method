@@ -35,43 +35,31 @@ public class Model {
                 case 2:
                     points = new double[][]{{mas[0][0], mas[0][1]}, {mas[1][0], mas[1][1]}}; // при двух функциях
                     points2 = new double[]{equals[0], equals[1]};
-                    double[] x = g.gaussian(points, points2);
-                        result.add(x[0]);
-                        result.add(x[1]);
+                    resultXY(points, points2, g);
                     break;
 
                 case 3:
                     points = new double[][]{{mas[0][0], mas[0][1]}, {mas[2][0], mas[2][1]}}; // при трех функциях
                     points2 = new double[]{equals[0], equals[2]};
-                    x = g.gaussian(points, points2);
-                    result.add(x[0]);
-                    result.add(x[1]);
+                    resultXY(points, points2, g);
                     points = new double[][]{{mas[1][0], mas[1][1]}, {mas[2][0], mas[2][1]}};
                     points2 = new double[]{equals[1], equals[2]};
-                    x = g.gaussian(points, points2);
-                    result.add(x[0]);
-                    result.add(x[1]);
+                    resultXY(points, points2, g);
                     break;
                 case 4:
                     points = new double[][]{{mas[0][0], mas[0][1]}, {mas[3][0], mas[3][1]}};
                     points2 = new double[]{equals[0], equals[3]};
-                    x = g.gaussian(points, points2);
-                    result.add(x[0]);
-                    result.add(x[1]);
+                    resultXY(points, points2, g);
                     points = new double[][]{{mas[1][0], mas[1][1]}, {mas[3][0], mas[3][1]}};
                     points2 = new double[]{equals[1], equals[3]};
-                    x = g.gaussian(points, points2);
-                    result.add(x[0]);
-                    result.add(x[1]);
+                    resultXY(points, points2, g);
                     points = new double[][]{{mas[2][0], mas[2][1]}, {mas[3][0], mas[3][1]}};
                     points2 = new double[]{equals[2], equals[3]};
-                    x = g.gaussian(points, points2);
-                    result.add(x[0]);
-                    result.add(x[1]);
+                    resultXY(points, points2, g);
                     break;
             }
         }
-        for (int i = 2; i <= equals.length; i++) {
+       /* for (int i = 2; i <= equals.length; i++) {
             switch (i) {
                 case 2:
                     points = new double[][]{{mas[0][0], mas[0][1]}, {1, 0}};
@@ -104,7 +92,7 @@ public class Model {
                     resultXY(points, points2, g);
                     break;
             }
-        }
+        }*/
 
         System.out.println(result.toString());
 
@@ -112,10 +100,29 @@ public class Model {
 
     private void resultXY(double[][] points, double[] points2, GaussianElimination g) {
         double[] x = g.gaussian(points, points2);
-        if (x[0] % 0.1 != 0)
-            result.add(x[0]);
-        if (x[1] % 0.1 != 0)
-            result.add(x[1]);
+        if (x[0] <= restrictions_x) {
+            result.add(restrictions_x);
+        } else result.add(x[0]);
+        if (x[1] <= restrictions_x) {
+            result.add(restrictions_y);
+        } else result.add(x[1]);
+    }
+
+    public void maxMinFunction() {
+        double temp;
+        for (int i = 0; i < result.size(); i += 2) {
+            temp = (function_X * result.get(i)) + (function_Y * result.get(i + 1));
+            if (temp >= max) {
+                max = temp;
+            }
+            if (temp <= min) {
+                min = temp;
+            }
+        }
+
+
+        System.out.println("max = " + max);
+        System.out.println("min = " + min);
     }
 
     public void count() {
